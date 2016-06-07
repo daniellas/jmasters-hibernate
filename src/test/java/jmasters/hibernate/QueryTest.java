@@ -77,4 +77,56 @@ public class QueryTest {
         System.out.println(teachers);
     }
 
+    @Test
+    public void findByFirstNameLastLetterZShouldReturnTwoRows() {
+        TypedQuery<Teacher> query = em.createQuery(
+                "select t from jmasters.hibernate.entity.Teacher t where t.firstName like '%z'", Teacher.class);
+        List<Teacher> teachers = query.getResultList();
+
+        Assert.assertEquals(2, teachers.size());
+        System.out.println(teachers);
+    }
+
+    @Test
+    public void findByFirstNameJanOrTomaszShouldReturnTwoRows() {
+        TypedQuery<Teacher> query = em.createQuery(
+                "select t from jmasters.hibernate.entity.Teacher t where t.firstName='Jan' or t.firstName='Tomasz'",
+                Teacher.class);
+        List<Teacher> teachers = query.getResultList();
+
+        Assert.assertEquals(2, teachers.size());
+        System.out.println(teachers);
+    }
+
+    @Test
+    public void findByFirstNameLastNameShouldReturnOneRow() {
+        TypedQuery<Teacher> query = em.createQuery(
+                "select t from jmasters.hibernate.entity.Teacher t where t.firstName='Jan' and t.lastName='Kowalski'",
+                Teacher.class);
+        List<Teacher> teachers = query.getResultList();
+
+        Assert.assertEquals(1, teachers.size());
+        System.out.println(teachers);
+    }
+
+    @Test
+    public void findByAgeOver30ShouldReturnTwoRows() {
+        TypedQuery<Teacher> query = em.createQuery(
+                "select t from jmasters.hibernate.entity.Teacher t where t.age>30", Teacher.class);
+        List<Teacher> teachers = query.getResultList();
+
+        Assert.assertEquals(2, teachers.size());
+        System.out.println(teachers);
+    }
+
+    @Test
+    public void findByAgeBelowEqual35ShouldReturnTwoRows() {
+        TypedQuery<Teacher> query = em.createQuery(
+                "select t from jmasters.hibernate.entity.Teacher t where t.age<=35", Teacher.class);
+        List<Teacher> teachers = query.getResultList();
+
+        Assert.assertEquals(2, teachers.size());
+        System.out.println(teachers);
+    }
+
 }
