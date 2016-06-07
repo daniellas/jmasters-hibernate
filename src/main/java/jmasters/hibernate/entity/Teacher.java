@@ -26,6 +26,8 @@ public class Teacher implements Serializable {
     @Column(unique = true)
     private String nick;
 
+    private Integer age;
+
     public Long getId() {
         return id;
     }
@@ -87,6 +89,20 @@ public class Teacher implements Serializable {
 
     public void setNick(String nick) {
         this.nick = nick;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Teacher [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", nick=" + nick + ", age="
+                + age + "]";
     }
 
 }
