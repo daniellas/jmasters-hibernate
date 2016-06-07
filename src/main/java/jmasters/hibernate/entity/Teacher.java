@@ -2,6 +2,7 @@ package jmasters.hibernate.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,9 +17,14 @@ public class Teacher implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false)
     private String firstName;
 
+    @Column(nullable = false)
     private String lastName;
+
+    @Column(unique = true)
+    private String nick;
 
     public Long getId() {
         return id;
@@ -73,6 +79,14 @@ public class Teacher implements Serializable {
         } else if (!lastName.equals(other.lastName))
             return false;
         return true;
+    }
+
+    public String getNick() {
+        return nick;
+    }
+
+    public void setNick(String nick) {
+        this.nick = nick;
     }
 
 }

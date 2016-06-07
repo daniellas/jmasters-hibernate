@@ -1,12 +1,11 @@
 package jmasters.hibernate;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
+import javax.persistence.PersistenceException;
+import javax.persistence.RollbackException;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -30,52 +29,96 @@ public class EntityTest {
         em = emf.createEntityManager();
     }
 
-    @Test
-    public void test1InsertShouldSetId() {
+    @Test(expected = PersistenceException.class)
+    public void test1InsertWithoutFirstLastNameShouldFail() {
         Teacher teacher = new Teacher();
-        EntityTransaction tx = em.getTransaction();
+        EntityTransaction tx = null;
 
-        tx.begin();
-        em.persist(teacher);
-        tx.commit();
-        Assert.assertNotNull(teacher.getId());
-        id = teacher.getId();
+        try {
+            tx = em.getTransaction();
+            tx.begin();
+
+            em.persist(teacher);
+
+            tx.commit();
+
+            Assert.assertNotNull(teacher.getId());
+            id = teacher.getId();
+        } catch (RuntimeException e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            System.out.println("Błąd: " + e.getMessage());
+            throw e;
+        }
     }
 
     @Test
-    public void test2FindByIdShouldHasSameId() {
-        Teacher teacher = em.find(Teacher.class, id);
-
-        Assert.assertEquals(id, teacher.getId());
-    }
-
-    @Test
-    public void test3UpdateShouldSuccess() {
-        Teacher teacher = em.find(Teacher.class, id);
+    public void test2InsertWithFirstLastNameShouldSuccess() {
+        Teacher teacher = new Teacher();
 
         teacher.setFirstName("Jan");
-        EntityTransaction tx = em.getTransaction();
+        teacher.setLastName("Kowalski");
+        teacher.setNick("Jasio");
 
-        tx.begin();
-        em.merge(teacher);
-        tx.commit();
+        EntityTransaction tx = null;
+
+        try {
+            tx = em.getTransaction();
+            tx.begin();
+
+            em.persist(teacher);
+
+            tx.commit();
+
+            Assert.assertNotNull(teacher.getId());
+            Assert.assertEquals("Jan", teacher.getFirstName());
+            Assert.assertEquals("Kowalski", teacher.getLastName());
+            Assert.assertEquals("Jasio", teacher.getNick());
+
+            id = teacher.getId();
+        } catch (RuntimeException e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+
+            throw e;
+        }
     }
 
     @Test
-    public void test4UpdatedShouldHasFirstName() {
+    public void test3FindByIdShouldReturnTeacherWithValidFirstLastName() {
         Teacher teacher = em.find(Teacher.class, id);
 
         Assert.assertEquals("Jan", teacher.getFirstName());
+        Assert.assertEquals("Kowalski", teacher.getLastName());
+        Assert.assertEquals("Jasio", teacher.getNick());
     }
 
-    @Test
-    public void test5FindAllShouldReturnOneRow() {
-        TypedQuery<Teacher> query = em.createQuery("select t from jmasters.hibernate.entity.Teacher t", Teacher.class);
-        List<Teacher> teachers = query.getResultList();
+    @Test(expected = RollbackException.class)
+    public void test4AddSameNickShouldFail() {
+        Teacher teacher = new Teacher();
 
-        Assert.assertEquals(1, teachers.size());
-        Assert.assertEquals(id, teachers.iterator().next().getId());
-        Assert.assertEquals("Jan", teachers.iterator().next().getFirstName());
+        teacher.setFirstName("Tomasz");
+        teacher.setLastName("Nowak");
+        teacher.setNick("Jasio");
+
+        EntityTransaction tx = null;
+
+        try {
+            tx = em.getTransaction();
+            tx.begin();
+
+            em.persist(teacher);
+
+            tx.commit();
+        } catch (RuntimeException e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+
+            System.out.println("Błąd: "+e.getCause().getCause().getCause().getMessage());
+            throw e;
+        }
     }
-
 }
