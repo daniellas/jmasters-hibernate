@@ -90,7 +90,7 @@ public class RelationsTest {
     }
 
     @Test
-    public void coursesShouldHasValidTeachers() {
+    public void coursesShouldHaveValidTeachers() {
         TypedQuery<Course> query = em.createQuery(
                 "select c from jmasters.hibernate.entity.Course c", Course.class);
         List<Course> courses = query.getResultList();
