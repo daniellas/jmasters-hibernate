@@ -30,44 +30,47 @@ public class RelationsTest {
 
         EntityTransaction tx = em.getTransaction();
 
-        Teacher teacher;
+        tx.begin();
 
         Course math = new Course();
-
         math.setName("Matematyka");
 
         Course english = new Course();
-
         english.setName("J. angielski");
-
-        tx.begin();
 
         em.persist(math);
         em.persist(english);
 
-        teacher = new Teacher();
-        teacher.setFirstName("Jan");
-        teacher.setLastName("Kowalski");
-        teacher.setNick("Jasio");
-        teacher.setAge(30);
-        teacher.setCourse(math);
-        em.persist(teacher);
+        Teacher jan = new Teacher();
+        jan.setFirstName("Jan");
+        jan.setLastName("Kowalski");
+        jan.setNick("Jasio");
+        jan.setAge(30);
+        jan.setCourse(math);
+        em.persist(jan);
 
-        teacher = new Teacher();
-        teacher.setFirstName("Tomasz");
-        teacher.setLastName("Nowak");
-        teacher.setNick("Nowaczek");
-        teacher.setAge(35);
-        teacher.setCourse(math);
-        em.persist(teacher);
+        Teacher tomasz = new Teacher();
+        tomasz.setFirstName("Tomasz");
+        tomasz.setLastName("Nowak");
+        tomasz.setNick("Nowaczek");
+        tomasz.setAge(35);
+        tomasz.setCourse(math);
+        em.persist(tomasz);
 
-        teacher = new Teacher();
-        teacher.setFirstName("Grzegorz");
-        teacher.setLastName("Brzęczyszczykiewicz");
-        teacher.setNick("Bzyk");
-        teacher.setAge(50);
-        teacher.setCourse(english);
-        em.persist(teacher);
+        Teacher grzegorz = new Teacher();
+        grzegorz.setFirstName("Grzegorz");
+        grzegorz.setLastName("Brzęczyszczykiewicz");
+        grzegorz.setNick("Bzyk");
+        grzegorz.setAge(50);
+        grzegorz.setCourse(english);
+        em.persist(grzegorz);
+
+        math.getTeachers().add(jan);
+        math.getTeachers().add(tomasz);
+        em.merge(math);
+
+        english.getTeachers().add(grzegorz);
+        em.merge(english);
 
         tx.commit();
     }
@@ -90,6 +93,23 @@ public class RelationsTest {
 
         Assert.assertEquals("J. angielski", teachers.iterator().next().getCourse().getName());
         System.out.println(teachers);
+    }
+
+    @Test
+    public void coursesShouldHasValidTeachers() {
+        TypedQuery<Course> query = em.createQuery(
+                "select c from jmasters.hibernate.entity.Course c", Course.class);
+        List<Course> courses = query.getResultList();
+        Course course = courses.get(0);
+
+        Assert.assertEquals("Jan", course.getTeachers().get(0).getFirstName());
+        Assert.assertEquals("Tomasz", course.getTeachers().get(1).getFirstName());
+        System.out.println(course.getTeachers());
+
+        course = courses.get(1);
+        Assert.assertEquals("Grzegorz", course.getTeachers().get(0).getFirstName());
+        System.out.println(course.getTeachers());
+
     }
 
 }

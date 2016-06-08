@@ -1,6 +1,7 @@
 package jmasters.hibernate.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -21,9 +22,9 @@ public class Course implements Serializable {
 
     @Column(unique = true, nullable = false)
     private String name;
-    
+
     @OneToMany
-    private List<Teacher> teachers;
+    private List<Teacher> teachers = new ArrayList<>();
 
     public Long getId() {
         return id;
