@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Teacher implements Serializable {
@@ -27,6 +28,9 @@ public class Teacher implements Serializable {
     private String nick;
 
     private Integer age;
+
+    @ManyToOne(optional = false)
+    private Course course;
 
     public Long getId() {
         return id;
@@ -102,7 +106,15 @@ public class Teacher implements Serializable {
     @Override
     public String toString() {
         return "Teacher [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", nick=" + nick + ", age="
-                + age + "]";
+                + age + ", course=" + course + "]";
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 
 }

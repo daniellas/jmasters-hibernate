@@ -4,6 +4,7 @@
     <persistence-unit name="jmasters">
     
         <!-- Nasze encje -->
+        <class>jmasters.entity.Course</class>
         <class>jmasters.entity.Teacher</class>
 
         <properties>
