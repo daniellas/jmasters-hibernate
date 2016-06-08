@@ -18,7 +18,7 @@ import jmasters.hibernate.entity.Course;
 import jmasters.hibernate.entity.Teacher;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TeacherTest {
+public class RelationsTest {
 
     private static EntityManagerFactory emf;
     private static EntityManager em;
