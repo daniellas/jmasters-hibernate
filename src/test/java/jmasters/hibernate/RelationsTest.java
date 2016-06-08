@@ -72,8 +72,19 @@ public class RelationsTest {
         marcin.setLastName("Marcinkiewicz");
         em.persist(marcin);
 
+        Pupil michal = new Pupil();
+        michal.setFirstName("Michał");
+        michal.setLastName("Michalski");
+        em.persist(michal);
+
         jan.getPupils().add(marcin);
+        jan.getPupils().add(michal);
         em.merge(jan);
+
+        michal.getTeachers().add(jan);
+        em.merge(michal);
+        marcin.getTeachers().add(jan);
+        em.merge(marcin);
 
         tx.commit();
     }
@@ -113,6 +124,26 @@ public class RelationsTest {
         Assert.assertEquals("Grzegorz", course.getTeachers().get(0).getFirstName());
         System.out.println(course.getTeachers());
 
+    }
+
+    @Test
+    public void teacherShouldHasTwoPupils() {
+        TypedQuery<Teacher> query = em.createQuery(
+                "select t from jmasters.hibernate.entity.Teacher t where t.firstName='Jan'", Teacher.class);
+        List<Teacher> teachers = query.getResultList();
+
+        Assert.assertEquals(2, teachers.iterator().next().getPupils().size());
+        System.out.println(teachers.iterator().next().getPupils());
+    }
+
+    @Test
+    public void michalShuldHasOneTeacher() {
+        TypedQuery<Pupil> query = em.createQuery(
+                "select p from jmasters.hibernate.entity.Pupil p where p.firstName='Michał'", Pupil.class);
+        List<Pupil> pupils = query.getResultList();
+
+        Assert.assertEquals(1, pupils.iterator().next().getTeachers().size());
+        System.out.println(pupils.iterator().next().getTeachers());
     }
 
 }
