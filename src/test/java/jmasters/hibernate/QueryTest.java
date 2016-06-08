@@ -129,4 +129,19 @@ public class QueryTest {
         System.out.println(teachers);
     }
 
+    @Test
+    public void findAgregatesShouldReturnValues() {
+        TypedQuery<Object[]> query = em.createQuery(
+                "select MIN(t.age),MAX(t.age),AVG(t.age),COUNT(*) from jmasters.hibernate.entity.Teacher t",
+                Object[].class);
+        List<Object[]> teachers = query.getResultList();
+
+        Assert.assertEquals(1, teachers.size());
+        Object[] row = teachers.iterator().next();
+        System.out.println(row[0]);
+        System.out.println(row[1]);
+        System.out.println(row[2]);
+        System.out.println(row[3]);
+    }
+
 }
