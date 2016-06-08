@@ -23,7 +23,7 @@ public class Course implements Serializable {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @OneToMany
+    @OneToMany(mappedBy = "course")
     private List<Teacher> teachers = new ArrayList<>();
 
     public Long getId() {
