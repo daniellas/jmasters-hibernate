@@ -38,16 +38,12 @@ public class RelationsTest {
         Course english = new Course();
         english.setName("J. angielski");
 
-        em.persist(math);
-        em.persist(english);
-
         Teacher jan = new Teacher();
         jan.setFirstName("Jan");
         jan.setLastName("Kowalski");
         jan.setNick("Jasio");
         jan.setAge(30);
         jan.setCourse(math);
-        em.persist(jan);
 
         Teacher tomasz = new Teacher();
         tomasz.setFirstName("Tomasz");
@@ -55,7 +51,6 @@ public class RelationsTest {
         tomasz.setNick("Nowaczek");
         tomasz.setAge(35);
         tomasz.setCourse(math);
-        em.persist(tomasz);
 
         Teacher grzegorz = new Teacher();
         grzegorz.setFirstName("Grzegorz");
@@ -63,14 +58,13 @@ public class RelationsTest {
         grzegorz.setNick("Bzyk");
         grzegorz.setAge(50);
         grzegorz.setCourse(english);
-        em.persist(grzegorz);
 
         math.getTeachers().add(jan);
         math.getTeachers().add(tomasz);
-        em.merge(math);
+        em.persist(math);
 
         english.getTeachers().add(grzegorz);
-        em.merge(english);
+        em.persist(english);
 
         tx.commit();
     }
