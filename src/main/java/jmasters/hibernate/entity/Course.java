@@ -1,12 +1,14 @@
 package jmasters.hibernate.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Course implements Serializable {
@@ -19,6 +21,9 @@ public class Course implements Serializable {
 
     @Column(unique = true, nullable = false)
     private String name;
+    
+    @OneToMany
+    private List<Teacher> teachers;
 
     public Long getId() {
         return id;
@@ -64,6 +69,14 @@ public class Course implements Serializable {
     @Override
     public String toString() {
         return "Course [id=" + id + ", name=" + name + "]";
+    }
+
+    public List<Teacher> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(List<Teacher> teachers) {
+        this.teachers = teachers;
     }
 
 }
