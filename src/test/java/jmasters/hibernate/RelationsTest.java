@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import jmasters.hibernate.entity.Course;
+import jmasters.hibernate.entity.Pupil;
 import jmasters.hibernate.entity.Teacher;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -65,6 +66,14 @@ public class RelationsTest {
 
         english.getTeachers().add(grzegorz);
         em.persist(english);
+
+        Pupil marcin = new Pupil();
+        marcin.setFirstName("Marcin");
+        marcin.setLastName("Marcinkiewicz");
+        em.persist(marcin);
+
+        jan.getPupils().add(marcin);
+        em.merge(jan);
 
         tx.commit();
     }

@@ -1,12 +1,15 @@
 package jmasters.hibernate.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -31,6 +34,9 @@ public class Teacher implements Serializable {
 
     @ManyToOne(optional = false)
     private Course course;
+
+    @ManyToMany
+    private List<Pupil> pupils = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -115,6 +121,14 @@ public class Teacher implements Serializable {
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    public List<Pupil> getPupils() {
+        return pupils;
+    }
+
+    public void setPupils(List<Pupil> pupils) {
+        this.pupils = pupils;
     }
 
 }

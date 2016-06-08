@@ -4,16 +4,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 
 @Entity
-public class Course implements Serializable {
+public class Pupil implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -21,10 +20,13 @@ public class Course implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String name;
+    @Column(nullable = false)
+    private String firstName;
 
-    @OneToMany(mappedBy = "course", cascade = { CascadeType.ALL })
+    @Column(nullable = false)
+    private String lastName;
+
+    @ManyToMany(mappedBy = "pupils")
     private List<Teacher> teachers = new ArrayList<>();
 
     public Long getId() {
@@ -35,19 +37,28 @@ public class Course implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+        result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
         return result;
     }
 
@@ -59,18 +70,23 @@ public class Course implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Course other = (Course) obj;
-        if (name == null) {
-            if (other.name != null)
+        Pupil other = (Pupil) obj;
+        if (firstName == null) {
+            if (other.firstName != null)
                 return false;
-        } else if (!name.equals(other.name))
+        } else if (!firstName.equals(other.firstName))
+            return false;
+        if (lastName == null) {
+            if (other.lastName != null)
+                return false;
+        } else if (!lastName.equals(other.lastName))
             return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "Course [id=" + id + ", name=" + name + "]";
+        return "Pupil [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + "]";
     }
 
     public List<Teacher> getTeachers() {

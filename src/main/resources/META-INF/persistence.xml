@@ -6,6 +6,7 @@
         <!-- Nasze encje -->
         <class>jmasters.entity.Course</class>
         <class>jmasters.entity.Teacher</class>
+        <class>jmasters.entity.Pupil</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver" />
