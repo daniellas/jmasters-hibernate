@@ -81,9 +81,14 @@ public class RelationsTest {
         jan.getPupils().add(michal);
         em.merge(jan);
 
+        tomasz.getPupils().add(marcin);
+        em.merge(tomasz);
+
         michal.getTeachers().add(jan);
         em.merge(michal);
+        
         marcin.getTeachers().add(jan);
+        marcin.getTeachers().add(tomasz);
         em.merge(marcin);
 
         tx.commit();
@@ -106,6 +111,16 @@ public class RelationsTest {
         List<Pupil> pupils = query.getResultList();
 
         Assert.assertEquals(1, pupils.iterator().next().getTeachers().size());
+        System.out.println(pupils.iterator().next().getTeachers());
+    }
+
+    @Test
+    public void marcinShuldHasTwoTeachers() {
+        TypedQuery<Pupil> query = em.createQuery(
+                "select p from jmasters.hibernate.entity.Pupil p where p.firstName='Marcin'", Pupil.class);
+        List<Pupil> pupils = query.getResultList();
+
+        Assert.assertEquals(2, pupils.iterator().next().getTeachers().size());
         System.out.println(pupils.iterator().next().getTeachers());
     }
 
