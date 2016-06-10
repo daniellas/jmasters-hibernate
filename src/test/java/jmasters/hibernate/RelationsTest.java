@@ -90,43 +90,6 @@ public class RelationsTest {
     }
 
     @Test
-    public void mathTeacherShouldHasMathCourseSet() {
-        TypedQuery<Teacher> query = em.createQuery(
-                "select t from jmasters.hibernate.entity.Teacher t where t.firstName='Jan'", Teacher.class);
-        List<Teacher> teachers = query.getResultList();
-
-        Assert.assertEquals("Matematyka", teachers.iterator().next().getCourse().getName());
-        System.out.println(teachers);
-    }
-
-    @Test
-    public void englishTeacherShouldHasEnglishCourseSet() {
-        TypedQuery<Teacher> query = em.createQuery(
-                "select t from jmasters.hibernate.entity.Teacher t where t.firstName='Grzegorz'", Teacher.class);
-        List<Teacher> teachers = query.getResultList();
-
-        Assert.assertEquals("J. angielski", teachers.iterator().next().getCourse().getName());
-        System.out.println(teachers);
-    }
-
-    @Test
-    public void coursesShouldHaveValidTeachers() {
-        TypedQuery<Course> query = em.createQuery(
-                "select c from jmasters.hibernate.entity.Course c", Course.class);
-        List<Course> courses = query.getResultList();
-        Course course = courses.get(0);
-
-        Assert.assertEquals("Jan", course.getTeachers().get(0).getFirstName());
-        Assert.assertEquals("Tomasz", course.getTeachers().get(1).getFirstName());
-        System.out.println(course.getTeachers());
-
-        course = courses.get(1);
-        Assert.assertEquals("Grzegorz", course.getTeachers().get(0).getFirstName());
-        System.out.println(course.getTeachers());
-
-    }
-
-    @Test
     public void teacherShouldHasTwoPupils() {
         TypedQuery<Teacher> query = em.createQuery(
                 "select t from jmasters.hibernate.entity.Teacher t where t.firstName='Jan'", Teacher.class);
